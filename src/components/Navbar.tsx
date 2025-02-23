@@ -39,6 +39,14 @@ const Header = () => {
                 About
               </a>
             </li>
+            <li>
+              <Link to='/login'
+                className="rounded-lg backdrop-blur-[2px] p-1 inline-block"
+                
+              >
+                Login
+              </Link>
+            </li>
             <li className="relative">
               <Link
                 className="rounded-lg backdrop-blur-[2px] p-1 inline-block"
