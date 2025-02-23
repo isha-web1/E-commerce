@@ -1,5 +1,6 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useAppDispatch } from "../redux/hooks";
+import { updateQuantity } from "../redux/feature/cartSlice";
 
 
 
@@ -8,8 +9,7 @@ const CardDetails = ({ product }: any) => {
   const dispatch = useAppDispatch()
   const handleQuantity =(type:string,id:string)=>{
     const payload = {type,id}
-    // dispatch(updateQuantit(payload))
-    console.log(payload ,dispatch)
+    dispatch(updateQuantity(payload))
   }
   return (
     <div className="flex items-center justify-between space-x-4 border border-gray-300 rounded-lg p-4 bg-white shadow-md transition-transform transform hover:scale-105 hover:shadow-lg w-full max-w-md mx-auto">

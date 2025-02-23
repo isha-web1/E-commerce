@@ -27,8 +27,34 @@ export const cartSlice = createSlice({
     console.log(action.payload)
     state.selectedItems = selectSelectedItems(state);
     state.totalPrice = selectTotalPrice(state);
+    state.tax = selectTax(state);
+    state.grandTotal = selectGrandTotal(state);
+    },
+    
+    updateQuantity: (state: any, action) => {
+      const products = state.products.map((product: any) => {
+        if (product.id === action.payload.id) {
+          if (action.payload.type === "increment") {
+            product.quantity += 1;
+          } else if (action.payload.type === "decrement") {
+            product.quantity -= 1;
+          }
+        }
+        return product;
+      });
+      state.selectedItems = selectSelectedItems(state);
+      state.totalPrice = selectTotalPrice(state);
+      state.tax = selectTax(state);
+      state.grandTotal = selectGrandTotal(state);
+    },
+
+    clearCart: (state)=>{
+      state.products=[];
+      state.selectedItems=0;
+      state.totalPrice=0;
+      state.tax=0;
+      state.grandTotal=0;
     }
-   
   },
 })
 
@@ -42,7 +68,14 @@ export const selectSelectedItems = (state: any) =>
       return Number(total + product.quantity * product.price);
     }, 0);
 
-export const { addToCart } = cartSlice.actions
+    export const selectTax = (state: any) =>
+      selectTotalPrice(state) * state.taxRate;
+
+    export const selectGrandTotal = (state: any) => {
+      return selectTotalPrice(state) + selectTotalPrice(state) * state.taxRate;
+    };
+
+export const { addToCart, updateQuantity ,clearCart} = cartSlice.actions
 
 
 export default cartSlice.reducer
