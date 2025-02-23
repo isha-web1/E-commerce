@@ -24,7 +24,9 @@ export const cartSlice = createSlice({
      if (!isExist) {
       state.products.push({ ...action.payload, quantity: 1 });
     }
+    console.log(action.payload)
     state.selectedItems = selectSelectedItems(state);
+    state.totalPrice = selectTotalPrice(state);
     }
    
   },
@@ -34,6 +36,11 @@ export const selectSelectedItems = (state: any) =>
   state.products.reduce((total: number, product: any) => {
     return Number(total + product.quantity);
   }, 0);
+
+  export const selectTotalPrice = (state: any) =>
+    state.products.reduce((total: number, product: any) => {
+      return Number(total + product.quantity * product.price);
+    }, 0);
 
 export const { addToCart } = cartSlice.actions
 
