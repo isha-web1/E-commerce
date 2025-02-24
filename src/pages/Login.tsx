@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 
 
 const Login = () => {
@@ -12,10 +13,11 @@ const Login = () => {
       <div className="card-body">
         <fieldset className="fieldset">
           <label className="fieldset-label">Email</label>
-          <input type="email" className="input" placeholder="Email" />
+          <input id="email" type="email" className="input" placeholder="Email" />
           <label className="fieldset-label">Password</label>
-          <input type="password" className="input" placeholder="Password" />
-          <div><a className="link link-hover">Forgot password?</a></div>
+          <input id="password" type="password" className="input" placeholder="Password" />
+          <div><Link to='/register' className="link link-hover text-xl ">New here? Register</Link></div>
+          <div><a className="link link-hover text-xl">Forgot password?</a></div>
           <button className="btn btn-neutral mt-4">Login</button>
         </fieldset>
       </div>
