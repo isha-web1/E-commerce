@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
-import { useAppDispatch } from '../redux/hooks'
+import { useAppDispatch } from "../redux/hooks";
 import { addToCart } from "../redux/feature/cartSlice";
+import Swal from "sweetalert2";
+import {  useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../redux/feature/auth/authSlice";
 
 const ProductCart = ({ product }: { product: any }) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const user = useSelector(selectCurrentUser);
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
@@ -18,9 +24,39 @@ const ProductCart = ({ product }: { product: any }) => {
     setShowModal(false);
   };
 
-  const handleAddToCart=(product : any)=>{
-    dispatch(addToCart(product))
-  }
+  const handleAddToCart = (product: any) => {
+    // Assuming 'user' is an object that contains email when logged in
+    // and is null/undefined or an object without email when not.
+    if (user && user.email) {
+      // 1. User is logged in: Dispatch the Redux action
+      dispatch(addToCart(product));
+
+      // 2. Show success notification
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: `${product.name} added to your cart`, // Assumes product has a 'name' property
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      // 1. User is NOT logged in: Show login prompt
+      Swal.fire({
+        title: "Please login to order the food",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Login now!",
+      }).then((result) => {
+        // 2. Check if the user clicked 'Login now!'
+        if (result.isConfirmed) {
+          // 3. Navigate to the login page, passing current location for redirect
+          navigate('/login', { state: { from: location } });;
+        }
+      });
+    }
+  };
   return (
     <div className="relative">
       {showModal && (
@@ -49,10 +85,9 @@ const ProductCart = ({ product }: { product: any }) => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              handleAddToCart(product)
+              handleAddToCart(product);
             }}
-            
-            className="bg-green-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-800 transition duration-300 shadow-md hover:shadow-lg"
+            className="bg-green-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-green-800 transition duration-300 shadow-md hover:shadow-lg cursor-pointer"
           >
             Add to Cart
           </button>

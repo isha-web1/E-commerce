@@ -2,14 +2,18 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { setEmail, setName, setPassword, setRole } from "../redux/feature/RegisterSlice";
+import { useSignUpMutation } from "../redux/api/Auth/authApi";
 
 const Register = () => {
     const dispatch = useAppDispatch();
     const {name, email, password,role} = useAppSelector((store:RootState) => store.register);
 
-    const handleSubmit = (e : any)=>{
+    const [signUp] = useSignUpMutation();
+
+    const handleSubmit = async(e : any)=>{
      e.preventDefault();
-     console.log('our input',{name, email, password, role})
+    const user = await signUp({userName:name, email, password, role});
+     console.log('our input',{name, email, password, role}, 'output:', user)
     }
   return (
     <div className="hero bg-base-200 min-h-[100px]">

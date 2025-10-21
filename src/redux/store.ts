@@ -1,18 +1,26 @@
-import { configureStore,  } from '@reduxjs/toolkit'
-import cartReducer from './feature/cartSlice'
-import registerReducer from './feature/RegisterSlice'
-import { baseApi } from './api/BaseApi'
+import { configureStore } from '@reduxjs/toolkit';
+import { baseApi } from './api/BaseApi';
+import authReducer from './feature/auth/authSlice';
+import registerReducer from './feature/RegisterSlice';
+import cartReducer from './feature/cartSlice';
+
+
 
 export const store = configureStore({
-  reducer : {
-   [baseApi.reducerPath] : baseApi.reducer,
-   cart : cartReducer,
-   register : registerReducer
-  },
-  
-})
+    reducer: {
+        // [baseApi.reducerPath] is typically 'api'
+        [baseApi.reducerPath]: baseApi.reducer,
+        
+        // 🔑 Add the new Auth Slice reducer
+        auth: authReducer, 
+        cart: cartReducer,
+        
+        // Your existing register slice
+        register: registerReducer, 
+    },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(baseApi.middleware),
+});
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

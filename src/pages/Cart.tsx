@@ -5,7 +5,7 @@ import { useAppSelector } from "../redux/hooks";
 
 
 const Cart = () => {
-    //   const products = getAllProducts();
+      // const products = getAllProducts();
       const products = useAppSelector((store) => store.cart.products);
     return (
         <div className="container mt-10 mx-auto">
